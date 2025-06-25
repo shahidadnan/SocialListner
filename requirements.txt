@@ -3,3 +3,4 @@ pandas
 langchain
 langchain-groq
 pydantic
+plotly
