@@ -1,10 +1,16 @@
 import csv
 from googleapiclient.discovery import build
+import os
+from dotenv import load_dotenv
+load_dotenv() 
 
-API_KEY = 'AIzaSyDrtBA5cVa-HkAy91VjiN_GdXNG3L_uynw'
+
 #VIDEO_ID='k2DbnzJa9fk'
+google_api_key=os.getenv("API_KEY")
+#print(google_api_key)
+
 def get_youtube_client():
-    return build('youtube', 'v3', developerKey=API_KEY)
+    return build('youtube', 'v3', developerKey=google_api_key)
 
 def get_all_comments(video_id):
     youtube = get_youtube_client()
@@ -59,7 +65,7 @@ def save_to_csv(comments, filename='youtube_comments_with_replies.csv'):
         writer.writeheader()
         writer.writerows(comments)
 
-"""
+""""
 if __name__ == "__main__":
     print("Fetching comments and replies...")
     comments = get_all_comments(VIDEO_ID)
@@ -67,5 +73,6 @@ if __name__ == "__main__":
 
     save_to_csv(comments)
     print("Saved to youtube_comments_with_replies.csv")
-    print("Done.") """
+    print("Done.") 
+    """
     

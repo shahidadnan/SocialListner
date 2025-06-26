@@ -5,5 +5,3 @@ langchain-groq
 pydantic
 plotly
 google-api-python-client
-io
-csv
