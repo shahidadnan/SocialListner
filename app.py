@@ -9,6 +9,10 @@ from langchain_groq import ChatGroq
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import JsonOutputParser
 from pydantic import BaseModel, Field
+from utube_comment_replies_scrap import get_all_comments, save_to_csv
+from urllib.parse import urlparse, parse_qs
+import io
+import csv
 
         
 
@@ -242,6 +246,15 @@ def create_sentiment_chart(sentiment_data: Dict):
     
     st.plotly_chart(fig, use_container_width=True)
 
+def extract_video_id(url):
+    parsed = urlparse(url)
+    if 'youtube.com' in parsed.netloc:
+        return parse_qs(parsed.query).get("v", [None])[0]
+    elif 'youtu.be' in parsed.netloc:
+        return parsed.path.lstrip('/')
+    return None
+    
+
 def create_theme_chart(themes_data: List[Dict]):
     """Create a bar chart for themes"""
     if not PLOTLY_AVAILABLE or not themes_data:
@@ -420,16 +433,13 @@ def main():
     
     # Main interface
     col1, col2 = st.columns([2, 1])
-    
+    df = None
     with col1:
         st.subheader("📹 Video Input")
         video_url = st.text_input(
             "YouTube Video URL",
             placeholder="https://www.youtube.com/watch?v=..."
         )
-
-        """here to write funcionalities to extract comment from URL"""
-    
     with col2:
         st.subheader("📂 Upload Comments")
         uploaded_file = st.file_uploader(
@@ -437,12 +447,40 @@ def main():
             type=['csv'],
             help="Upload your scraped comments CSV file"
         )
+
+    if video_url:
+        video_id = extract_video_id(video_url)
+
+        if video_id:
+            try:
+                # st.write(video_id)
+                comments = get_all_comments(video_id)
+                # save_to_csv(comments)
+
+                output = io.StringIO()
+                writer = csv.DictWriter(output, fieldnames=comments[0].keys())
+                writer.writeheader()
+                writer.writerows(comments)
+                output.seek(0)
+
+            # ✅ Load into pandas DataFrame
+                uploaded_file_csv=output
+                df = pd.read_csv(output)
+                st.success(f"✅ Saved {len(comments)} comments to CSV.")
+            except Exception as e:
+                st.error(f"❌ Error fetching comments: {e}")
+        else:
+            st.error("❌ Could not extract video ID from URL.")
+
     
     if uploaded_file is not None:
-        try:
             # Load comments
             df = pd.read_csv(uploaded_file)
-            
+
+
+    if df is not None:
+
+        try:          
             # Detect comment column
             comment_columns = ['comment', 'Comment', 'text', 'Text', 'content', 'Content', 'body', 'Body']
             comment_col = None
@@ -483,7 +521,7 @@ def main():
                     progress_bar.progress(25)
                     
                     # Process comments in batches
-                    batch_size = 20
+                    batch_size = len(df)//10
                     all_sentiments = []
                     sentiment_summary = {"positive_count": 0, "negative_count": 0, "neutral_count": 0}
                     
