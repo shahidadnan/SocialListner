@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 load_dotenv() 
 
 
-
+os.environ["GOOGLE_AUTH_SUPPRESS_CLOUD_METADATA"] = "1"
 google_api_key=os.getenv("API_KEY")
 
 
