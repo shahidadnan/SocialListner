@@ -5,9 +5,9 @@ from dotenv import load_dotenv
 load_dotenv() 
 
 
-#VIDEO_ID='k2DbnzJa9fk'
+
 google_api_key=os.getenv("API_KEY")
-#print(google_api_key)
+
 
 def get_youtube_client():
     return build('youtube', 'v3', developerKey=google_api_key)
@@ -73,6 +73,5 @@ if __name__ == "__main__":
 
     save_to_csv(comments)
     print("Saved to youtube_comments_with_replies.csv")
-    print("Done.") 
-    """
+    print("Done.") """
     
