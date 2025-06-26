@@ -3,14 +3,16 @@ from googleapiclient.discovery import build
 import os
 from dotenv import load_dotenv
 load_dotenv() 
+import streamlit as st
 
+API_KEY = st.secrets["YOUTUBE_API_KEY"]
 
 os.environ["GOOGLE_AUTH_SUPPRESS_CLOUD_METADATA"] = "1"
 google_api_key=os.getenv("API_KEY")
 
 
 def get_youtube_client():
-    return build('youtube', 'v3', developerKey=google_api_key)
+    return build('youtube', 'v3', developerKey=API_KEY)
 
 def get_all_comments(video_id):
     youtube = get_youtube_client()
