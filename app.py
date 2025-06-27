@@ -450,13 +450,24 @@ def main():
 
     if video_url:
         video_id = extract_video_id(video_url)
-        status_text.text("Fetching comments...")
         if video_id:
             try:
                 # st.write(video_id)
+                status_placeholder = st.empty()
+                progress_bar = st.progress(0)
+
+                status_placeholder.info("🔄 Fetching comments...")
+                progress_bar.progress(20)
+                
+
+
                 comments = get_all_comments(video_id)
                 # save_to_csv(comments)
-
+                progress_bar.progress(60)
+                progress_bar.progress(80)
+                progress_bar.progress(100)
+                status_placeholder.success("✅ Analysis completed!")
+                
                 output = io.StringIO()
                 writer = csv.DictWriter(output, fieldnames=comments[0].keys())
                 writer.writeheader()
