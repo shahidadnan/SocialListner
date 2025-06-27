@@ -97,7 +97,7 @@ class CommentAnalyzer:
         my_list = my_list[:200] if len(my_list) > 200 else my_list
         comments_text = "\n".join([f"{i+1}. {comment[:200]}..." if len(comment) > 200 else f"{i+1}. {comment}" for i, comment in enumerate(my_list)])
         
-        model= ChatGroq(model = 'Deepseek-R1-Distill-Llama-70b',max_tokens=2000, groq_api_key=self.groq_api_key)
+        model= ChatGroq(model = 'llama-3.3-70b-versatile',max_tokens=2000, groq_api_key=self.groq_api_key)
 
         parser = JsonOutputParser(pydantic_object=SentimentAnalysis)
 
@@ -127,7 +127,7 @@ class CommentAnalyzer:
             return result
         
         except Exception as e:
-            st.error(f"Error in sentiment analysis: {str(e)}")
+            st.error(f"Oops it's me AI I have please wait to complete the process: {str(e)}")
             return None
         
 
@@ -143,7 +143,7 @@ class CommentAnalyzer:
         ])
 
         # Initialize Groq LLM
-        llm= ChatGroq(model = 'Deepseek-R1-Distill-Llama-70b',max_tokens=2000, groq_api_key=self.groq_api_key)
+        llm= ChatGroq(model = 'llama-3.3-70b-versatile',max_tokens=2000, groq_api_key=self.groq_api_key)
 
         # Set up the JSON output parser
         parser = JsonOutputParser(pydantic_object=ThemeAnalysis)
