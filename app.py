@@ -127,7 +127,7 @@ class CommentAnalyzer:
             return result
         
         except Exception as e:
-            st.error(f"Oops it's me AI I have please wait to complete the process: {str(e)}")
+            st.error(f"Oops it's me AI I have please wait to complete the process: Token limit reached")
             return None
         
 
@@ -459,14 +459,12 @@ def main():
                 status_placeholder.info("🔄 Fetching comments...")
                 progress_bar.progress(20)
                 
-
-
                 comments = get_all_comments(video_id)
                 # save_to_csv(comments)
                 progress_bar.progress(60)
                 progress_bar.progress(80)
                 progress_bar.progress(100)
-                status_placeholder.success("✅ Analysis completed!")
+                status_placeholder.success("✅ Fetching completed!")
                 
                 output = io.StringIO()
                 writer = csv.DictWriter(output, fieldnames=comments[0].keys())
