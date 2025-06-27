@@ -127,7 +127,7 @@ class CommentAnalyzer:
             return result
         
         except Exception as e:
-            st.error(f"Oops it's me AI I have please wait to complete the process: Token limit reached")
+            st.error(f"Oops it's me AI model : Token limit reached, Try after some time")
             return None
         
 
