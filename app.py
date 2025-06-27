@@ -450,7 +450,7 @@ def main():
 
     if video_url:
         video_id = extract_video_id(video_url)
-
+        status_text.text("Fetching comments...")
         if video_id:
             try:
                 # st.write(video_id)
@@ -521,7 +521,7 @@ def main():
                     progress_bar.progress(25)
                     
                     # Process comments in batches
-                    batch_size = len(df)//10
+                    batch_size = 20
                     all_sentiments = []
                     sentiment_summary = {"positive_count": 0, "negative_count": 0, "neutral_count": 0}
                     
